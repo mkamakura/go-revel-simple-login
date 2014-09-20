@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"github.com/revel/revel"
-	"fmt"
-	"strings"
+    "github.com/revel/revel"
+    "fmt"
+    "strings"
 )
 
 func init() {
-	revel.OnAppStart(InitDB)
+    revel.OnAppStart(InitDB)
     revel.InterceptMethod((*GorpController).Begin, revel.BEFORE)
     revel.InterceptMethod((*GorpController).Commit, revel.AFTER)
     revel.InterceptMethod((*GorpController).Rollback, revel.FINALLY)
@@ -23,24 +23,24 @@ func getParamString(param string, defaultValue string) string {
         }
     }
 
-	return p
+    return p
 }
 
 func getConnectionString() string {
-	host := getParamString("db.host", "")
-	port := getParamString("db.port", "3306")
-	user := getParamString("db.user", "")
-	pass := getParamString("db.password", "")
-	dbname := getParamString("db.name", "")
-	protocol := getParamString("db.protocol", "tcp")
-	dbargs := getParamString("dbargs", " ")
+    host := getParamString("db.host", "")
+    port := getParamString("db.port", "3306")
+    user := getParamString("db.user", "")
+    pass := getParamString("db.password", "")
+    dbname := getParamString("db.name", "")
+    protocol := getParamString("db.protocol", "tcp")
+    dbargs := getParamString("dbargs", " ")
 
-	if strings.Trim(dbargs, " ") != "" {
-		dbargs = "?" + dbargs
-	} else {
-		dbargs = ""
-	}
+    if strings.Trim(dbargs, " ") != "" {
+        dbargs = "?"+dbargs
+    } else {
+        dbargs = ""
+    }
 
-	return fmt.Sprintf("%s:%s@%s([%s]:%s)/%s%s",
-		user, pass, protocol, host, port, dbname, dbargs)
+    return fmt.Sprintf("%s:%s@%s([%s]:%s)/%s%s",
+        user, pass, protocol, host, port, dbname, dbargs)
 }

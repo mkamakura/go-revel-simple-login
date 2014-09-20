@@ -4,7 +4,7 @@ import (
     "github.com/coopernurse/gorp"
     "database/sql"
     "github.com/revel/revel"
-	_ "github.com/go-sql-driver/mysql"
+    _ "github.com/go-sql-driver/mysql"
 )
 
 var (

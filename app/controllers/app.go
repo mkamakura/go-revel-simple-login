@@ -1,36 +1,36 @@
 package controllers
 
 import (
-	"crypto/md5"
-	"encoding/hex"
-	"github.com/revel/revel"
-	"LoginSample/app/models"
-	"LoginSample/app/routes"
+    "crypto/md5"
+    "encoding/hex"
+    "github.com/revel/revel"
+    "LoginSample/app/models"
+    "LoginSample/app/routes"
 )
 
 type App struct {
-	GorpController
+    GorpController
 }
 
 func (c App) Index() revel.Result {
-	if c.connected() != nil {
-	//	return c.Redirect(routes.App.Index())
-	}
-	c.Flash.Error("Please log in first")
+    if c.connected() != nil {
+        // return c.Redirect(routes.App.Index())
+    }
+    c.Flash.Error("Please log in first")
 
-	headerTitle := "タイトル"
+    headerTitle := "タイトル"
     return c.Render(headerTitle)
 }
 
 func (c App) connected() *models.Manager {
-	if c.RenderArgs["manager"] != nil {
-		return c.RenderArgs["manager"].(*models.Manager)
-	}
-	if name, ok := c.Session["manager"]; ok {
-		return c.findManagerByName(name)
-	}
+    if c.RenderArgs["manager"] != nil {
+        return c.RenderArgs["manager"].(*models.Manager)
+    }
+    if name, ok := c.Session["manager"]; ok {
+        return c.findManagerByName(name)
+    }
 
-	return nil
+    return nilå
 }
 
 func (c App) Login(name string, password string) revel.Result {
@@ -41,42 +41,42 @@ func (c App) Login(name string, password string) revel.Result {
         c.Validation.Keep()
         c.FlashParams()
         return c.Redirect(App.Index)
-	}
+    }
 
-	manager := c.findManagerByName(name)
+    manager := c.findManagerByName(name)
 
-	if manager != nil {
-		hashPassword := getMD5Hash(password)
-		if manager.Password == hashPassword {
-			c.Session["manager"] = name
-			c.Session.SetNoExpiration()
-			c.Flash.Success("Welcome, " + name)
-			return c.Redirect(routes.App.Index())
-		}
-	}
+    if manager != nil {
+        hashPassword := getMD5Hash(password)
+        if manager.Password == hashPassword {
+            c.Session["manager"] = name
+            c.Session.SetNoExpiration()
+            c.Flash.Success("Welcome, " + name)
+            return c.Redirect(routes.App.Index())
+        }
+    }
 
-	c.Flash.Error("Login failed")
-	return c.Redirect(routes.App.Index())
+    c.Flash.Error("Login failed")
+    return c.Redirect(routes.App.Index())
 }
 
 func (c App) findManagerByName(name string) *models.Manager {
-	manager, err := c.Txn.Select(models.Manager{},
-		`SELECT * FROM manager WHERE name = ?`, name)
+    manager, err := c.Txn.Select(models.Manager{},
+        `SELECT * FROM manager WHERE name = ?`, name)
 
-	if err != nil {
-		revel.ERROR.Println(err)
-		return nil
-	}
-	if len(manager) == 0 {
-		revel.ERROR.Printf("manager not found[%s]", name)
-		return nil
-	}
+    if err != nil {
+        revel.ERROR.Println(err)
+        return nil
+    }
+    if len(manager) == 0 {
+        revel.ERROR.Printf("manager not found[%s]", name)
+        return nil
+    }
 
-	return manager[0].(*models.Manager)
+    return manager[0].(*models.Manager)
 }
 
 func getMD5Hash(password string) string {
-	hasher := md5.New()
-	hasher.Write([]byte(password))
-	return hex.EncodeToString(hasher.Sum(nil))
+    hasher := md5.New()
+    hasher.Write([]byte(password))
+    return hex.EncodeToString(hasher.Sum(nil))
 }
