@@ -1,0 +1,25 @@
+{{set . "title" "Home"}}
+{{template "header.html" .}}
+
+<header class="hero-unit" style="background-color:#F5BCA9">
+  <div class="container">
+    <div class="row">
+      <h2>{{.greeting}}</h2>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="row">
+    <div class="span6">
+      {{template "flash.html" .}}
+      <form action="App/Login" method="POST">
+        <input type="text" name="name"/><br/>
+        <input type="password" name="password"/><br/>
+        <input type="submit" value="ログイン"/>
+      </form>
+    </div>
+  </div>
+</div>
+
+{{template "footer.html" .}}
