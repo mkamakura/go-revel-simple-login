@@ -30,7 +30,7 @@ func (c App) connected() *models.Manager {
         return c.findManagerByName(name)
     }
 
-    return nilå
+    return nil
 }
 
 func (c App) Login(name string, password string) revel.Result {
