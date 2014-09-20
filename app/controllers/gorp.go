@@ -4,10 +4,10 @@ import (
     "github.com/coopernurse/gorp"
     "database/sql"
     "github.com/revel/revel"
-	_ "github.com/go-sql-driver/mysql"
-	_ "fmt"
-	_ "strings"
-	"LoginSample/app/models"
+    _ "github.com/go-sql-driver/mysql"
+    _ "fmt"
+    _ "strings"
+    "LoginSample/app/models"
 )
 
 var (
@@ -24,20 +24,20 @@ var InitDB func() = func() {
     if db, err := sql.Open("mysql", connectionString); err != nil {
         revel.ERROR.Fatal(err)
     } else {
-		Dbm = &gorp.DbMap {
-			Db: db,
-			Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
-	}
+        Dbm = &gorp.DbMap {
+            Db: db,
+            Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
+    }
 
-	defineManagerTable(Dbm)
-	if err := Dbm.CreateTablesIfNotExists(); err != nil {
-		revel.ERROR.Fatal(err)
-	}
+    defineManagerTable(Dbm)
+    if err := Dbm.CreateTablesIfNotExists(); err != nil {
+        revel.ERROR.Fatal(err)
+    }
 }
 
 func defineManagerTable(dbm *gorp.DbMap) {
-	t := dbm.AddTable(models.Manager{}).SetKeys(true, "id")
-	t.ColMap("name").SetMaxSize(25)
+    t := dbm.AddTable(models.Manager{}).SetKeys(true, "id")
+    t.ColMap("name").SetMaxSize(25)
 }
 
 
