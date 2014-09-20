@@ -2,10 +2,13 @@ package controllers
 
 import (
 	"github.com/revel/revel"
+	"LoginSample/app/models"
+	"LoginSample/app/routes"
+	"fmt"
 )
 
 type App struct {
-    *revel.Controller
+	GorpController
 }
 
 func (c App) Index() revel.Result {
@@ -23,5 +26,28 @@ func (c App) Login(name string, password string) revel.Result {
         return c.Redirect(App.Index)
 	}
 
-    return c.Render(name)
+	manager := c.findManagerByName(name)
+
+	if manager != nil {
+
+	}
+
+	c.Flash.Out["name"] = name
+	c.Flash.Error("Login failed")
+	return c.Redirect(routes.App.Index())
+}
+
+func (c App) findManagerByName(name string) *models.Manager {
+	manager, err := c.Txn.Select(models.Manager{},
+		`SELECT * FROM Manager WHERE name = ?`, name)
+
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	if len(manager) == 0 {
+		return nil
+	}
+
+	return manager[0].(*models.Manager)
 }

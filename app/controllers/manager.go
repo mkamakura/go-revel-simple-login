@@ -3,17 +3,10 @@ package controllers
 import (
     "github.com/revel/revel"
     "LoginSample/app/models"
-    "encoding/json"
 )
 
 type ManagerCtrl struct {
     GorpController
-}
-
-func (c ManagerCtrl) parseManager() (models.Manager, error) {
-    manager := models.Manager{}
-    err := json.NewDecoder(c.Request.Body).Decode(&manager)
-    return manager, err
 }
 
 func (c ManagerCtrl) findManagerByName(name string) revel.Result {
